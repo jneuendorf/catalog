@@ -123,12 +123,20 @@ class AppLayout extends React.Component {
 
     return (
       <div className={css(styles.container)}>
-        <div className={css(styles.content)}>
-          <PageHeader
-            theme={theme}
-            title={page.title}
-            superTitle={page.superTitle}
-          />
+        <div
+          className={
+            theme.showSideNav
+              ? css(styles.content)
+              : css({ ...styles.content, "@media (min-width: 1000px)": {} })
+          }
+        >
+          {theme.showHeader && (
+            <PageHeader
+              theme={theme}
+              title={page.title}
+              superTitle={page.superTitle}
+            />
+          )}
           <div className={css({ flexGrow: 1 })}>{this.props.children}</div>
           {!page.hideFromMenu && (
             <NavigationBar
@@ -138,17 +146,21 @@ class AppLayout extends React.Component {
             />
           )}
         </div>
-        <MenuIcon
-          className={css(styles.menuIcon)}
-          onClick={this.toggleSidebar}
-          onTouchEnd={this.toggleSidebar}
-        />
+        {theme.showHeader && (
+          <MenuIcon
+            className={css(styles.menuIcon)}
+            onClick={this.toggleSidebar}
+            onTouchEnd={this.toggleSidebar}
+          />
+        )}
         <div
           className={css(styles.navBackground)}
           onClick={this.toggleSidebar}
           onTouchEnd={this.toggleSidebar}
         />
-        <div className={css(styles.sideNav)}>{sideNav}</div>
+        {theme.showSideNav && (
+          <div className={css(styles.sideNav)}>{sideNav}</div>
+        )}
       </div>
     );
   }
